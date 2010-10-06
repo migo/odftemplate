@@ -1,0 +1,9 @@
+.classpath
+.project
+.scala_dependencies
+lib_managed/
+target/
+boot/
+*~
+project/plugins/project/
+project/plugins/src_managed/
