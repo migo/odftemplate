@@ -12,6 +12,7 @@ The template language is quite simple and is inspired by [Apache Wicket](http://
 In the template, there are only simple markers such as [[amount]]. It contains no logic at all. The template can be created with Open Office and saved as a normal ODT document.
 
 The action that is performed with a paragraph containing such a marker is defined in the Scala code:
+
 * The marker can just be replaced with a value
 * The whole paragraph containing the marker can be removed
 * The paragraph containing the marker can be repeated. In each repetition, all markers in the paragraph are replaced with new values.
