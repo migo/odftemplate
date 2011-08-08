@@ -7,3 +7,4 @@ boot/
 *~
 project/plugins/project/
 project/plugins/src_managed/
+.target
