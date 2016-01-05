@@ -9,7 +9,7 @@ organization := "de.gtlk"
 {
   val liftVersion = "2.3"
   libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest" % "1.5" % "test",
+    "org.scalatest" %% "scalatest" % "2.2.4" % "test",
     "xerces" % "xercesImpl" % "2.9.1"
   )
 }
@@ -32,7 +32,7 @@ organization := "de.gtlk"
 scalacOptions += "-deprecation"
 
 // set the Scala version used for the project
-scalaVersion := "2.8.1"
+scalaVersion := "2.11.7"
 
 // add a sequence of maven-style repositories
 resolvers ++= Seq("Scala-Tools Maven2 Releases Repository" at 
