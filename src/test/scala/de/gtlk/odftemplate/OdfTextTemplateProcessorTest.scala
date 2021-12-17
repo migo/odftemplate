@@ -1,12 +1,11 @@
 package de.gtlk.odftemplate
 
-import org.scalatest.FunSuite
-import org.w3c.dom.Node
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  * Test for the open office text template processor.
  */
-class OdfTextTemplateProcessorTest extends FunSuite {
+class OdfTextTemplateProcessorTest extends AnyFunSuite {
   
   import TestDocumentParameters._
   import OdfTextTemplateProcessorTest._
@@ -39,7 +38,7 @@ class OdfTextTemplateProcessorTest extends FunSuite {
     processor.performAlterations(alterations)
     
     val fullText = processor.extractFullText()
-    
+
     // The text should not contain any parameters any longer but
     // should contain all replacements
     textReplacements.foreach { replacement =>
@@ -95,7 +94,7 @@ object OdfTextTemplateProcessorTest {
       )
     }
     
-    if (!unknownParams.isEmpty) {
+    if (unknownParams.nonEmpty) {
       fail("The following unknown parameters are present in the template: " + 
           unknownParams.mkString(", "))
     }
@@ -107,18 +106,18 @@ object OdfTextTemplateProcessorTest {
    */
   def checkParametersPresentInTemplate(processor: OdfTextTemplateProcessor,
       templateParameters: TemplateParameters) {
-    var allParameters = templateParameters.allParameters
+    var allParameters = templateParameters.allParameters()
 
     processor.forAllTextNodesInDocument { textNode =>
-      var text = textNode.getTextContent
-      templateParameters.allParameters.foreach { parameter =>
+      val text = textNode.getTextContent
+      templateParameters.allParameters().foreach { parameter =>
         if (parameter.isContainedIn(text)) {
           allParameters = allParameters.filter(_ != parameter)
         }
       }
     }
     
-    if (!allParameters.isEmpty) {
+    if (allParameters.nonEmpty) {
       fail("The following parameters are not present in the template: " + 
           allParameters.map(_.name).mkString(", "))
     }
@@ -127,7 +126,7 @@ object OdfTextTemplateProcessorTest {
   /**
    * Creates a template processor for the test document in the classpath.
    */
-  def processorForTestDocument() = OdfTextTemplateProcessor.fromStream(getClass.
+  def processorForTestDocument(): OdfTextTemplateProcessor = OdfTextTemplateProcessor.fromStream(getClass.
         getResourceAsStream("/TestDocumentWithTemplateParameters.odt"))
 }
 
@@ -135,12 +134,12 @@ object OdfTextTemplateProcessorTest {
  * Parameters contained in the test document.
  */
 object TestDocumentParameters extends TemplateParameters {
-  val NAME = param("Name")
-  val STREET = param("Street")
-  val CITY = param("City")
-  val DATE = param("Date")
-  val INVOICE_NUMBER = param("InvoiceNumber")
-  val POSITION = param("Position")
-  val PRICE = param("Price")
-  val SUM = param("Sum")
+  final val NAME = param("Name")
+  final val STREET = param("Street")
+  final val CITY = param("City")
+  final val DATE = param("Date")
+  final val INVOICE_NUMBER = param("InvoiceNumber")
+  final val POSITION = param("Position")
+  final val PRICE = param("Price")
+  final val SUM = param("Sum")
 }

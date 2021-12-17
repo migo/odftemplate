@@ -7,7 +7,7 @@ import org.w3c.dom.Node
  * 
  * @author Michael Gottschalk
  */
-case class TemplateParameter(val name: String) {
+case class TemplateParameter(name: String) {
     
   /**
    * Returns if the parameter is present in the given text.
@@ -21,7 +21,7 @@ case class TemplateParameter(val name: String) {
    * if it is present in the node.
    */
   def replaceInNodeWith(replacement: String, node: Node) {
-    val text = node.getTextContent()
+    val text = node.getTextContent
     if (isContainedIn(text)) {
       val replaced = text.replace(fullParameter, replacement)      
       node.setTextContent(replaced)

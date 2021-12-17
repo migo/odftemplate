@@ -1,8 +1,7 @@
 package de.gtlk.odftemplate
 
 import org.w3c.dom.Node
-import org.w3c.dom.NodeList
-import org.odftoolkit.odfdom.doc.text.OdfTextParagraph
+import org.odftoolkit.odfdom.incubator.doc.text.OdfTextParagraph
 
 /**
  * Interface for arbitrary open office text document manipulations.
@@ -30,7 +29,7 @@ trait DocumentAlteration {
  */
 case class TextReplacement(parameter: TemplateParameter, replacement: String) extends DocumentAlteration {
   
-  override def alterNode(textNode: Node, paragraph: OdfTextParagraph) = {
+  override def alterNode(textNode: Node, paragraph: OdfTextParagraph): Unit = {
     parameter.replaceInNodeWith(replacement, textNode)
   }
 }
@@ -42,7 +41,7 @@ case class TextReplacement(parameter: TemplateParameter, replacement: String) ex
 case class TextReplacementOrParagraphRemoval(parameter: TemplateParameter, replacement: Option[String])
     extends DocumentAlteration {
   
-  override def alterNode(textNode: Node, paragraph: OdfTextParagraph) = {
+  override def alterNode(textNode: Node, paragraph: OdfTextParagraph): Unit = {
     replacement match {
       case Some(rep) => parameter.replaceInNodeWith(rep, textNode)
       case None => {
@@ -60,7 +59,7 @@ case class TextReplacementOrParagraphRemoval(parameter: TemplateParameter, repla
  */
 case class ParagraphRepetition(parameters: List[TemplateParameter], replacementIterations: List[List[String]]) extends DocumentAlteration {
   
-  override def parameter = parameters.head
+  override def parameter: TemplateParameter = parameters.head
   
   override def alterNode(textNode: Node, paragraph: OdfTextParagraph) {
     val nextSibling = paragraph.getNextSibling

@@ -2,17 +2,15 @@ package de.gtlk.odftemplate
 
 import org.odftoolkit.odfdom.doc.OdfTextDocument
 import org.odftoolkit.odfdom.doc.OdfDocument
-import org.odftoolkit.odfdom.doc.office.OdfOfficeText
-import org.odftoolkit.odfdom.doc.text.OdfTextParagraph
-import org.odftoolkit.odfdom.dom.element.text.TextPElement;
-import org.odftoolkit.odfdom.dom.OdfNamespaceNames
-import org.odftoolkit.odfdom.OdfNamespace
+import org.odftoolkit.odfdom.incubator.doc.text.OdfTextParagraph
+import org.odftoolkit.odfdom.dom.element.text.TextPElement
+import org.odftoolkit.odfdom.dom.OdfDocumentNamespace
+import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 
 import java.io.InputStream
 import java.io.OutputStream
-
 import javax.xml.xpath.XPath
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
@@ -24,17 +22,17 @@ class OdfTextTemplateProcessor(val document: OdfTextDocument) {
   import OdfTextTemplateProcessor._
   
   // Content root of the document
-  val root = document.getContentRoot()
+  val root: OfficeTextElement = document.getContentRoot
   
   /**
    * Returns the full text of the document (without formatting).
    */
   def extractFullText(): String = {
     val result = new StringBuilder()
-    
+
     forAllParagraphs(root) { paragraph =>
       forAllTextNodes(paragraph) { textNode =>
-        result.append(textNode.getTextContent())
+        result.append(textNode.getTextContent)
       }
       result.append("\n")
     }
@@ -86,11 +84,11 @@ class OdfTextTemplateProcessor(val document: OdfTextDocument) {
 object OdfTextTemplateProcessor {
   
   // XPath instance with ODF Text namespace
-  val XPATH = XPathFactory.newInstance().newXPath()
-  XPATH.setNamespaceContext(OdfNamespace.newNamespace(OdfNamespaceNames.TEXT));
+  val XPATH: XPath = XPathFactory.newInstance().newXPath()
+  XPATH.setNamespaceContext(OdfTextNamespaceContext)
   
   // Name of the Paragraph XML element
-  val PARAGRAPH_NAME = TextPElement.ELEMENT_NAME.getQName()
+  val PARAGRAPH_NAME: String = TextPElement.ELEMENT_NAME.getQName
   
   
   /**
@@ -105,11 +103,11 @@ object OdfTextTemplateProcessor {
   /**
    * Iterates all paragraphs in the given document.
    */
-  def forAllParagraphs(root: OdfOfficeText)(function : OdfTextParagraph => Unit) {
-    val paragraphs: NodeList =  XPATH.evaluate("//" + PARAGRAPH_NAME, root, 
+  def forAllParagraphs(root: OfficeTextElement)(function : OdfTextParagraph => Unit) {
+    val paragraphs: NodeList = XPATH.evaluate("//" + PARAGRAPH_NAME, root,
           XPathConstants.NODESET).asInstanceOf[NodeList]
     
-    (0 until paragraphs.getLength()).foreach { paragraphNumber =>
+    (0 until paragraphs.getLength).foreach { paragraphNumber =>
       val paragraph = paragraphs.item(paragraphNumber).asInstanceOf[OdfTextParagraph]
       function(paragraph)
     }
@@ -122,7 +120,7 @@ object OdfTextTemplateProcessor {
     val textNodes: NodeList = XPATH.evaluate("descendant::text()", node, 
           XPathConstants.NODESET).asInstanceOf[NodeList]
       
-    (0 until textNodes.getLength()).foreach { textNodeNumber =>
+    (0 until textNodes.getLength).foreach { textNodeNumber =>
       val textNode = textNodes.item(textNodeNumber)
       function(textNode)
     }
